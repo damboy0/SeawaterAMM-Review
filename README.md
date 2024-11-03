@@ -10,9 +10,9 @@ The contract serves as the backbone of a decentralized AMM protocol, enabling:
 - Liquidity management through pool creation, liquidity provision, and position updates.
 - Administrative functions accessible only to the designated proxy admin.
 
-## Key Functions
+# Key Functions
 
-# Admin Functions
+## Admin Functions
 
 - Constructor: Initializes the contract by setting the proxy admin, seawater admin, NFT manager, and various executors. Additionally, it triggers initialization in the ExecutorAdmin via a delegate call.
 
@@ -20,7 +20,7 @@ The contract serves as the backbone of a decentralized AMM protocol, enabling:
 
 - updateExecutors: Lets the proxy admin update executor addresses, supporting the contract's modularity.
 
-# AMM Functions
+## AMM Functions
 
 Swap Functions: Provides functions like ``swapIn``, ``swapOut``, ``swapPermit2``, and others for token swapping with optional permits. Swaps are handled by delegating calls to specific swap executors.
 
@@ -69,3 +69,61 @@ uint256 constant DEFAULT_DEADLINE_BUFFER = 300; // Buffer of 5 minutes
 ```
 
 - Used in functions requiring permit authorizations, ensuring that authorizations cannot be reused indefinitely. Timeout buffer as a constant helps protect transactions from failing due to network delays or unexpected latency.
+
+
+# Functions
+
+## updateProxyAdmin
+```
+ function updateProxyAdmin(address newAdmin) public onlyProxyAdmin {
+        _setProxyAdmin(newAdmin);
+    }
+```
+
+- It Allows the current proxy admin to set a new admin address. Updates the ``proxyAdmin`` variable with ``newAdmin`` and ensures control over admin permissions can transfer smoothly and securely.
+
+
+## updateExecutors
+
+```
+function updateExecutors(
+        ISeawaterExecutorSwap executorSwap,
+        ISeawaterExecutorSwapPermit2 executorSwapPermit2,
+        ISeawaterExecutorQuote executorQuote,
+        ISeawaterExecutorPosition executorPosition,
+        ISeawaterExecutorUpdatePosition executorUpdatePosition,
+        ISeawaterExecutorAdmin executorAdmin,
+        ISeawaterExecutorFallback executorFallback
+    ) public onlyProxyAdmin {
+        _setProxies(executorSwap, executorSwapPermit2, executorQuote, executorPosition, executorUpdatePosition, executorAdmin, executorFallback);
+    }
+```
+
+- The ``updateExecutors`` function Enables the proxy admin to update executor addresses for different operational roles (e.g swap, quote, position, admin). it takes in parameters ``newExecutorSwap``, ``newExecutorQuote``, ``newExecutorPosition``, ``newExecutorAdmin``. The function Sets each executor address to the provided parameter if it is non-zero and it allows each executor to be updated individually.
+
+
+
+
+## fallback()
+
+```
+fallback() external {
+        require(msg.data.length > 3);
+        require(msg.data[0] == 0);
+        // swaps
+        if (uint8(msg.data[2]) == 0) directDelegate(_getExecutorSwap());
+        // update positions
+        else if (uint8(msg.data[2]) == 1) directDelegate(_getExecutorUpdatePosition());
+        // positions
+        else if (uint8(msg.data[2]) == 2) directDelegate(_getExecutorPosition());
+        // admin
+        else if (uint8(msg.data[2]) == 3) directDelegate(_getExecutorAdmin());
+        // swap permit 2
+        else if (uint8(msg.data[2]) == 4) directDelegate(_getExecutorSwapPermit2());
+        // quotes
+        else if (uint8(msg.data[2]) == 5) directDelegate(_getExecutorQuote());
+        else directDelegate(_getExecutorFallback());
+    }
+```
+
+- Handles any function calls not explicitly defined in this contract. it delegates the call to ``executorFallback``, if one exists.
