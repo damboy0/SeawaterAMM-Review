@@ -136,11 +136,11 @@ function updateExecutors(
 
 ```
 function createPoolD650E2D0(
-        address ,
-        uint256 ,
-        uint32 ,
-        uint8 ,
-        uint128 
+        address token ,
+        uint256 sqrtPriceX96 ,
+        uint32 fee ,
+        uint8  tickSpacing,
+        uint128 maxLiquidityPerTick
     ) external {
         directDelegate(_getExecutorAdmin());
     }
@@ -149,38 +149,54 @@ function createPoolD650E2D0(
 - The ``createPoolD650E2D0`` function delegate the creation of a new liquidity pool to the Admin Executor contract. it uses the directDelegate to passes the function call to a specific implementation contract (Seawater Executor) to handle the logic, rather than handling it within SeawaterAMM itself.
 
 
+## collectProtocol7540FA9F
+
+```
+function collectProtocol7540FA9F(
+        address pool,
+        uint128 amount0 ,
+        uint128 amount1 ,
+        address recipient 
+    ) external returns (uint128, uint128) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``collectProtocol7540FA9F`` function collects accumulated protocol fees from the Seawater AMM's liquidity pool to a designated treasury, administrator, or governance contract using the ``directDelegate``.  it takes an ``address`` which is the pool address, an ``amount0`` and ``amount1`` which is the amount to be sent and ``address`` of the recipient which the money is sent to as parameters.
+
+
 ## enablePool579DA658
 
 ```
 function enablePool579DA658(
-        address ,
-        bool
+        address pool ,
+        bool enabled
     ) external {
         directDelegate(_getExecutorAdmin());
     }
 ```
 
-- The ``enablePool579DA658`` function is inherited from ``IseawaterExecutor`` and delegates the enabling of a particular pool that has been created using the ``directDelegate``. it uses ``directDelegate`` where the actual logic for enabling the pool is handled by an external contract. it takes an ``address`` which is the address of the pool and a ``bool`` as parameters.
+- The ``enablePool579DA658`` function is inherited from ``IseawaterExecutor`` and delegates the enabling of a particular pool that has been created using the ``directDelegate``. it uses ``directDelegate`` where the actual logic for enabling the pool is handled by an external contract. it takes an ``address`` which is the address of the pool and a ``bool`` "enabled" as parameters.
 
 
 ## authoriseEnabler5B17C274
 
 ```
 function authoriseEnabler5B17C274(
-        address ,
-        bool
+        address enabler ,
+        bool enabled
     ) external {
         directDelegate(_getExecutorAdmin());
     }
 ```
 
-- The ``authoriseEnabler5B17C274`` function is inherited from ``IseawaterExecutor`` and it delegates the authorzation of a specific address as an "Enabler" which is  permitted to activate or manage pools, through functions like ``enablePool579DA658`` using the ``directDelegate``. it takes in an ``address`` which is the address of the person to be the enabler and also a ``bool`` as paramerers. 
+- The ``authoriseEnabler5B17C274`` function is inherited from ``IseawaterExecutor`` and it delegates the authorzation of a specific address as an "Enabler" which is  permitted to activate or manage pools, through functions like ``enablePool579DA658`` using the ``directDelegate``. it takes in an ``address`` which is the address of the person to be the enabler and also a ``bool`` "enabled" as paramerers. 
 
 
 ## setSqrtPriceFF4DB98C
 
 ```
-function setSqrtPriceFF4DB98C(address , uint256 ) external {
+function setSqrtPriceFF4DB98C(address pool , uint256 price ) external {
         directDelegate(_getExecutorAdmin());
     }
 ```
@@ -196,6 +212,42 @@ function updateNftManager9BDF41F6(address ) external {
     }
 ```
 - The ``updateNftManager9BDF41F6`` function is inherited from  ``IseawaterExecutor``  and it is used for assigning or updating the contract or entity responsible for managing NFTs within the AMM ecosystem using the ``directDelegate``. it takes and ``address`` which is the address of the person that is being assigned is the Nft Manager as parameter.  
+
+
+## updateEmergencyCouncil7D0C1C58
+
+```
+ function updateEmergencyCouncil7D0C1C58(address council ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``updateEmergencyCouncil7D0C1C58`` function is responsible for managing the assignment or update of an "Emergency Council" using the ``directDelegate``. Emergency Council typically refers to a group or address with elevated permissions, tasked with handling urgent protocol actions. This council is generally in place to respond to critical situations like hacks, major bugs, or economic attacks against the protocol. it takes the ``address`` to be given the Emergenc council role as a parameter.
+
+//Swap functions
+
+## swap904369BE
+
+```
+function swap904369BE(address pool , bool zeroForOne , int256 amount , uint256 priceLimit ) external returns (int256, int256) {
+        directDelegate(_getExecutorSwap());
+    }
+```
+
+- The ``swap904369BE`` function facilitates the exchange of one asset (Token A) for another (Token B) within a liquidity pool managed by the Seawater AMM through a low-level call using the ``directDelegate``. This allows users to trade between tokens in the liquidity pool with protections against excessive slippage and fee calculations that benefit liquidity providers. It takes an ``address pool`` which is the address of the pool, a ``bool zeroForOne`` to specify the direction of the swap between two tokens ,an ``int256 amount`` which is the amount to be swapped, and ``uint256 priceLimit`` which take the price limit as parameters
+
+
+## quote72E2ADE7
+
+```
+function quote72E2ADE7(address pool , bool zeroForOne , int256 amount , uint256 priceLimit ) external {
+        directDelegate(_getExecutorQuote());
+    }
+```
+
+- The ``quote72E2ADE7`` function is responsible for calculating or returning a quote or estimated amount for a potential swap between two tokens without actually executing the swap. It takes an ``address pool`` which is the address of the pool, a ``bool zeroForOne`` to specify the direction of the swap between two tokens ,an ``int256 amount`` which is the amount to be swapped, and ``uint256 priceLimit`` which take the price limit as parameters. 
+
+
 
 
 
