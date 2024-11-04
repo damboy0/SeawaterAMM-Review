@@ -103,6 +103,80 @@ function updateExecutors(
 
 
 
+## directDelegate
+
+```
+ function directDelegate(address to) internal {
+        assembly {
+            calldatacopy(0, 0, calldatasize())
+
+            
+            let result := delegatecall(gas(), to, 0, calldatasize(), 0, 0)
+
+            
+            returndatacopy(0, 0, returndatasize())
+
+            switch result
+            
+            case 0 {
+                revert(0, returndatasize())
+            }
+            default {
+                return(0, returndatasize())
+            }
+        }
+    }
+
+```
+
+- The directDelegate function here helps faciitate low-level delegate call to an external contract. This would possibly be allowing the AMM to integrate new features or updates without changing its own code. it takes a ``to`` address parameter when it needs to be called.
+
+
+## createPoolD650E2D0
+
+```
+function createPoolD650E2D0(
+        address ,
+        uint256 ,
+        uint32 ,
+        uint8 ,
+        uint128 
+    ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``createPoolD650E2D0`` function delegate the creation of a new liquidity pool to the Admin Executor contract. it uses the directDelegate to passes the function call to a specific implementation contract (Seawater Executor) to handle the logic, rather than handling it within SeawaterAMM itself.
+
+
+## enablePool579DA658
+
+```
+function enablePool579DA658(
+        address ,
+        bool
+    ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``enablePool579DA658`` function is inherited from ``IseawaterExecutor`` and delegates the enabling of a particular pool that has been created using the ``directDelegate``. it uses ``directDelegate`` where the actual logic for enabling the pool is handled by an external contract. it takes an ``address`` which is the address of the pool and a ``bool`` as parameters.
+
+
+## authoriseEnabler5B17C274
+
+```
+function authoriseEnabler5B17C274(
+        address /* enabler */,
+        bool /* enabled */
+    ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``authoriseEnabler5B17C274`` function is inherited from ``IseawaterExecutor`` and it delegates the authorzation of a specific address as an "Enabler" which is  permitted to activate or manage pools, through functions like ``enablePool579DA658`` using the ``directDelegate``. it takes in an ``address`` which is the address of the person to be the enabler and also a ``bool`` paramerers. 
+
+
 
 ## fallback()
 
