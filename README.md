@@ -167,14 +167,35 @@ function enablePool579DA658(
 
 ```
 function authoriseEnabler5B17C274(
-        address /* enabler */,
-        bool /* enabled */
+        address ,
+        bool
     ) external {
         directDelegate(_getExecutorAdmin());
     }
 ```
 
-- The ``authoriseEnabler5B17C274`` function is inherited from ``IseawaterExecutor`` and it delegates the authorzation of a specific address as an "Enabler" which is  permitted to activate or manage pools, through functions like ``enablePool579DA658`` using the ``directDelegate``. it takes in an ``address`` which is the address of the person to be the enabler and also a ``bool`` paramerers. 
+- The ``authoriseEnabler5B17C274`` function is inherited from ``IseawaterExecutor`` and it delegates the authorzation of a specific address as an "Enabler" which is  permitted to activate or manage pools, through functions like ``enablePool579DA658`` using the ``directDelegate``. it takes in an ``address`` which is the address of the person to be the enabler and also a ``bool`` as paramerers. 
+
+
+## setSqrtPriceFF4DB98C
+
+```
+function setSqrtPriceFF4DB98C(address , uint256 ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``setSqrtPriceFF4DB98C`` function is inherited from ``IseawaterExecutor`` and it is used in setting or adjusting the square root price for a pool using the ``directDelegate``. it takes an ``address `` which is the address of the pool, and a ``price`` as parameters.
+
+
+## updateNftManager9BDF41F6
+
+```
+function updateNftManager9BDF41F6(address ) external {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+- The ``updateNftManager9BDF41F6`` function is inherited from  ``IseawaterExecutor``  and it is used for assigning or updating the contract or entity responsible for managing NFTs within the AMM ecosystem using the ``directDelegate``. it takes and ``address`` which is the address of the person that is being assigned is the Nft Manager as parameter.  
 
 
 
