@@ -74,7 +74,7 @@ uint256 constant DEFAULT_DEADLINE_BUFFER = 300; // Buffer of 5 minutes
 # Functions
 
 ## updateProxyAdmin
-```
+```solidity
  function updateProxyAdmin(address newAdmin) public onlyProxyAdmin {
         _setProxyAdmin(newAdmin);
     }
@@ -483,6 +483,21 @@ Parameters:
  // position functions
 
 
+ ## mintPositionBC5B086D
+
+ ```
+function mintPositionBC5B086D(address /* token */, int32 /* lower */, int32 /* upper */) external returns (uint256 /* id */) {
+        directDelegate(_getExecutorPosition());
+    }
+ ```
+
+ - The ``mintPositionBC5B086D`` function aims to create a new position, allocating capital or liquidity into a protocol. Minting a position usually entails providing liquidity in the form of tokens to an AMM or staking in a yield farm, which can earn rewards or fees for the position holder. 
+
+Parameters: 
+
+- ``token`` : Represents the address of the token to be used in the position minting. However, this parameter is not actively used in this function body—it’s likely passed to the delegated function.
+- ``lower`` and  ``upper``: Represent the lower and upper bounds for the position (e.g., price range or tick range). These bounds might be specific to certain DeFi protocols, such as Uniswap V3, which uses a range for concentrated liquidity.
+
 
 
 
@@ -548,7 +563,7 @@ fallback() external {
 
 ## _setProxies
 
-```
+```solidity
 function _setProxies(
         ISeawaterExecutorSwap executorSwap,
         ISeawaterExecutorSwapPermit2 executorSwapPermit2,
