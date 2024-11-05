@@ -310,6 +310,95 @@ Parameters:
 - ``amountIn``: The exact amount of tokenIn that will be swapped.
 
 
+## swap2ExactInPermit236B2FDD8
+
+```
+function swap2ExactInPermit236B2FDD8(
+        address from ,
+        address  to ,
+        uint256  amount ,
+        uint256  minOut ,
+        uint256  nonce ,
+        uint256  deadline ,
+        bytes memory  sig 
+    ) external returns (uint256, uint256) {
+        directDelegate(_getExecutorSwapPermit2());
+    }
+```
+
+-  The ``swap2ExactInPermit236B2FDD8`` function facilitates an exact-input swap, where the user specifies the exact amount of the input token they want to swap using the ``directDelegate``.It also make use of a "Permit2" mechanism, which may be an enhanced version of the EIP-2612 "Permit" feature, allowing token approvals to be signed off-chain and enabling gasless approvals. 
+
+Parameters:
+
+- ``inputAmount``: The exact amount of tokens the user wishes to swap.
+- ``outputToken``: The token the user wants to receive.
+- ``inputToken``: The token the user is swapping from.
+- ``permitData``: Off-chain signed data for Permit2 authorization, allowing the contract to access the user's tokens without requiring an on-chain approval transaction.
+- ``minOutputAmount``: The minimum acceptable output amount to protect the user against unfavorable price slippage.
+
+
+
+## swapIn32502CA71
+
+```
+function swapIn32502CA71(address token, uint256 amountIn, uint256 minOut) external returns (int256, int256) {
+        (bool success, bytes memory data) = _getExecutorSwap().delegatecall(abi.encodeCall(
+            ISeawaterExecutorSwap.swap904369BE,
+            (
+                token,
+                true,
+                int256(amountIn),
+                type(uint256).max
+            )
+        ));
+        require(success, string(data));
+
+        (int256 swapAmountIn, int256 swapAmountOut) = abi.decode(data, (int256, int256));
+        require(-swapAmountOut >= int256(minOut), "min out not reached!");
+        return (swapAmountIn, swapAmountOut);
+    }
+```
+
+- The ``swapIn32502CA71`` function is used for performing an "exact-input" token swap. This means the user specifies the exact amount of tokens they want to swap (input token), and the contract will calculate the resulting output token amount based on real-time exchange rates on a decentralized exchange (DEX) or on the automated market maker (AMM). 
+
+Parameters:
+
+- ``inputAmount``: The exact amount of tokens the user wants to swap.
+- ``inputToken``: The token type the user is swapping from.
+- ``outputToken``: The token the user wants to receive.
+- ``minOutputAmount``: The minimum amount of outputToken the user is willing to accept to protect against slippage.
+
+
+## swapInPermit2CEAAB576
+
+```
+ function swapInPermit2CEAAB576(address token, uint256 amountIn, uint256 minOut, uint256 nonce, uint256 deadline, uint256 maxAmount, bytes memory sig) external returns (int256, int256) {
+        (bool success, bytes memory data) = _getExecutorSwapPermit2().delegatecall(abi.encodeCall(
+            ISeawaterExecutorSwapPermit2.swapPermit2EE84AD91,
+            (
+                token,
+                true,
+                int256(amountIn),
+                type(uint256).max,
+                nonce,
+                deadline,
+                maxAmount,
+                sig
+            )
+        ));
+        require(success, string(data));
+
+        (int256 swapAmountIn, int256 swapAmountOut) = abi.decode(data, (int256, int256));
+        // this contract uses checked arithmetic, this negate can revert
+        require(-swapAmountOut >= int256(minOut), "min out not reached!");
+        return (swapAmountIn, swapAmountOut);
+    }
+```
+
+
+- The ``swapInPermit2CEAAB576`` function 
+
+
 
 
 
@@ -338,3 +427,74 @@ fallback() external {
 ```
 
 - Handles any function calls not explicitly defined in this contract. it delegates the call to ``executorFallback``, if one exists.
+
+
+
+# Getter Functions
+
+``_getExecutorSwap()``: Retrieves the address of the ``EXECUTOR_SWAP_SLOT``. This executor is responsible for handling swap operations.
+
+``_getExecutorSwapPermit2()``: Retrieves the address of the ``EXECUTOR_SWAP_PERMIT2_SLOT``, involved in handling swap transactions with Permit2 (a type of permit or token allowance mechanism).
+
+``_getExecutorQuote()``: Retrieves the address from ``EXECUTOR_QUOTE_SLOT``, used for fetching or calculating price quotes for token exchanges.
+
+``_getExecutorPosition()``: Retrieves the address from ``EXECUTOR_POSITION_SLOT``, managing or querying the user's position (e.g., open trades or staked positions).
+
+``_getExecutorUpdatePosition()``: Retrieves the address from ``EXECUTOR_UPDATE_POSITION_SLOT``, used to update or modify the user’s position.
+
+``_getExecutorAdmin()``: Retrieves the address from ``EXECUTOR_ADMIN_SLOT``, representing the admin module or the contract's primary administrator.
+
+``_getExecutorFallback()``: Retrieves the address from ``EXECUTOR_FALLBACK_SLOT``, a fallback handler for unspecified or emergency actions.
+
+
+
+
+# Setter Functions
+
+
+## _setProxyAdmin
+
+```
+ function _setProxyAdmin(address newAdmin) internal {
+        StorageSlot.getAddressSlot(PROXY_ADMIN_SLOT).value = newAdmin;
+    }
+```
+
+
+``_setProxyAdmin(address newAdmin)`` Sets the address stored in ``PROXY_ADMIN_SLOT`` to newAdmin. This function is used to update the main administrative address for the proxy, which typically has permissions to upgrade or configure other components.
+
+
+## _setProxies
+
+```
+function _setProxies(
+        ISeawaterExecutorSwap executorSwap,
+        ISeawaterExecutorSwapPermit2 executorSwapPermit2,
+        ISeawaterExecutorQuote executorQuote,
+        ISeawaterExecutorPosition executorPosition,
+        ISeawaterExecutorUpdatePosition executorUpdatePosition,
+        ISeawaterExecutorAdmin executorAdmin,
+        ISeawaterExecutorFallback executorFallback
+    ) internal {
+        StorageSlot.getAddressSlot(EXECUTOR_SWAP_SLOT).value = address(executorSwap);
+        StorageSlot.getAddressSlot(EXECUTOR_SWAP_PERMIT2_SLOT).value = address(executorSwapPermit2);
+        StorageSlot.getAddressSlot(EXECUTOR_QUOTE_SLOT).value = address(executorQuote);
+        StorageSlot.getAddressSlot(EXECUTOR_POSITION_SLOT).value = address(executorPosition);
+        StorageSlot.getAddressSlot(EXECUTOR_UPDATE_POSITION_SLOT).value = address(executorUpdatePosition);
+        StorageSlot.getAddressSlot(EXECUTOR_ADMIN_SLOT).value = address(executorAdmin);
+        StorageSlot.getAddressSlot(EXECUTOR_FALLBACK_SLOT).value = address(executorFallback);
+    }
+```
+
+- The ``_setProxies(...)`` function Accepts several executor addresses as parameters and assigns them to their respective storage slots:
+
+- ``executorSwap`` → ``EXECUTOR_SWAP_SLOT``
+- ``executorSwapPermit2`` → ``EXECUTOR_SWAP_PERMIT2_SLOT``
+- ``executorQuote`` → ``EXECUTOR_QUOTE_SLOT``
+- ``executorPosition`` → ``EXECUTOR_POSITION_SLOT``
+- ``executorUpdatePosition`` → ``EXECUTOR_UPDATE_POSITION_SLOT``
+- ``executorAdmin`` → ``EXECUTOR_ADMIN_SLOT``
+- ``executorFallback`` → ``EXECUTOR_FALLBACK_SLOT``
+
+
+
