@@ -396,9 +396,91 @@ Parameters:
 ```
 
 
-- The ``swapInPermit2CEAAB576`` function 
+- The ``swapInPermit2CEAAB576`` function IS a token swap function that uses Permit2 functionality for off-chain approvals. This enables users to swap an exact amount of tokens without needing an additional on-chain approval transaction saving on gas costs. 
+
+Parameters: 
+
+- inputAmount: The exact amount of tokens the user wants to swap.
+- inputToken: The address of the token the user is swapping from.
+- outputToken: The address of the token the user wishes to receive.
+- minOutputAmount: The minimum acceptable amount of outputToken that the user is willing to receive, providing slippage protection.
+- permitData: The Permit2 authorization data (including a signed message) allowing the contract to transfer inputAmount of inputToken from the user’s wallet.
 
 
+
+
+
+## swapOut5E08A399
+
+```
+function swapOut5E08A399(address token, uint256 amountIn, uint256 minOut) external returns (int256, int256) {
+        (bool success, bytes memory data) = _getExecutorSwap().delegatecall(abi.encodeCall(
+            ISeawaterExecutorSwap.swap904369BE,
+            (
+                token,
+                false,
+                int256(amountIn),
+                type(uint256).max
+            )
+        ));
+        require(success, string(data));
+
+        (int256 swapAmountIn, int256 swapAmountOut) = abi.decode(data, (int256, int256));
+        require(swapAmountOut >= int256(minOut), "min out not reached!");
+        return (swapAmountIn, swapAmountOut);
+    }
+```
+
+-  The ``swapOut5E08A399`` function performs a "swap-out" operation, where the user specifies the exact amount of tokens they want to receive (output amount), and the function calculates the required input amount of tokens to execute this swap.  
+
+
+Parameters:
+
+- ``outputAmount``: The exact amount of tokens the user wants to receive.
+- ``inputToken``: The token being swapped from.
+- ``outputToken``: The token the user wishes to receive.
+- ``maxInputAmount``: The maximum acceptable amount of inputToken that the user is willing to pay, ensuring protection against high slippage.
+
+
+## swapOutPermit23273373B
+
+```
+function swapOutPermit23273373B(address token, uint256 amountIn, uint256 minOut, uint256 nonce, uint256 deadline, uint256 maxAmount, bytes memory sig) external returns (int256, int256) {
+        (bool success, bytes memory data) = _getExecutorSwapPermit2().delegatecall(abi.encodeCall(
+            ISeawaterExecutorSwapPermit2.swapPermit2EE84AD91,
+            (
+                token,
+                false,
+                int256(amountIn),
+                type(uint256).max,
+                nonce,
+                deadline,
+                maxAmount,
+                sig
+            )
+        ));
+        require(success, string(data));
+
+        (int256 swapAmountIn, int256 swapAmountOut) = abi.decode(data, (int256, int256));
+        require(swapAmountOut >= int256(minOut), "min out not reached!");
+        return (swapAmountIn, swapAmountOut);
+    }
+```
+
+
+-  The ``swapOutPermit23273373B`` funtion performs an exact-output token swap with ``permit`` functionality, which enables token approval and transfer in a single transaction allowing the user to approve the swap without needing a separate approval transaction. 
+
+Parameters: 
+
+- ``outputAmount``: The exact amount of the token the user wants to receive.
+- ``inputToken``: The token being swapped from.
+- ``outputToken``: The token the user wishes to receive.
+- ``maxInputAmount``: The maximum amount of inputToken the user is willing to pay.
+- ``permitData``: Data necessary for the permit signature, including the signature itself (v, r, s) and possibly the deadline for the permit to be valid.
+
+
+
+ // position functions
 
 
 
