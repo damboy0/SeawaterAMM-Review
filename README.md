@@ -85,7 +85,7 @@ uint256 constant DEFAULT_DEADLINE_BUFFER = 300; // Buffer of 5 minutes
 
 ## updateExecutors
 
-```
+```solidity
 function updateExecutors(
         ISeawaterExecutorSwap executorSwap,
         ISeawaterExecutorSwapPermit2 executorSwapPermit2,
@@ -105,7 +105,7 @@ function updateExecutors(
 
 ## directDelegate
 
-```
+```solidity
  function directDelegate(address to) internal {
         assembly {
             calldatacopy(0, 0, calldatasize())
@@ -134,7 +134,7 @@ function updateExecutors(
 
 ## createPoolD650E2D0
 
-```
+```solidity
 function createPoolD650E2D0(
         address token ,
         uint256 sqrtPriceX96 ,
@@ -151,7 +151,7 @@ function createPoolD650E2D0(
 
 ## collectProtocol7540FA9F
 
-```
+```solidity
 function collectProtocol7540FA9F(
         address pool,
         uint128 amount0 ,
@@ -167,7 +167,7 @@ function collectProtocol7540FA9F(
 
 ## enablePool579DA658
 
-```
+```solidity
 function enablePool579DA658(
         address pool ,
         bool enabled
@@ -181,7 +181,7 @@ function enablePool579DA658(
 
 ## authoriseEnabler5B17C274
 
-```
+```solidity
 function authoriseEnabler5B17C274(
         address enabler ,
         bool enabled
@@ -195,7 +195,7 @@ function authoriseEnabler5B17C274(
 
 ## setSqrtPriceFF4DB98C
 
-```
+```solidity
 function setSqrtPriceFF4DB98C(address pool , uint256 price ) external {
         directDelegate(_getExecutorAdmin());
     }
@@ -206,7 +206,7 @@ function setSqrtPriceFF4DB98C(address pool , uint256 price ) external {
 
 ## updateNftManager9BDF41F6
 
-```
+```solidity
 function updateNftManager9BDF41F6(address ) external {
         directDelegate(_getExecutorAdmin());
     }
@@ -216,7 +216,7 @@ function updateNftManager9BDF41F6(address ) external {
 
 ## updateEmergencyCouncil7D0C1C58
 
-```
+```solidity
  function updateEmergencyCouncil7D0C1C58(address council ) external {
         directDelegate(_getExecutorAdmin());
     }
@@ -228,7 +228,7 @@ function updateNftManager9BDF41F6(address ) external {
 
 ## swap904369BE
 
-```
+```solidity
 function swap904369BE(address pool , bool zeroForOne , int256 amount , uint256 priceLimit ) external returns (int256, int256) {
         directDelegate(_getExecutorSwap());
     }
@@ -239,7 +239,7 @@ function swap904369BE(address pool , bool zeroForOne , int256 amount , uint256 p
 
 ## quote72E2ADE7
 
-```
+```solidity
 function quote72E2ADE7(address pool , bool zeroForOne , int256 amount , uint256 priceLimit ) external {
         directDelegate(_getExecutorQuote());
     }
@@ -250,7 +250,7 @@ function quote72E2ADE7(address pool , bool zeroForOne , int256 amount , uint256 
 
 ## quote2CD06B86E
 
-```
+```solidity
  function quote2CD06B86E(address  to , address from , uint256 amount , uint256  minOut) external {
         directDelegate(_getExecutorQuote());
     }
@@ -262,7 +262,7 @@ function quote72E2ADE7(address pool , bool zeroForOne , int256 amount , uint256 
 
 ## swapPermit2EE84AD91
 
-```
+```solidity
 function swapPermit2EE84AD91(
         address pool,
         bool zeroForOne ,
@@ -295,7 +295,7 @@ Parameters:
 
 ## swap2ExactIn41203F1D
 
-```
+```solidity
  function swap2ExactIn41203F1D(address /* tokenA */, address /* tokenB */, uint256 /* amountIn */, uint256 /* minAmountOut */) external returns (uint256, uint256) {
         directDelegate(_getExecutorSwap());
     }
@@ -312,7 +312,7 @@ Parameters:
 
 ## swap2ExactInPermit236B2FDD8
 
-```
+```solidity
 function swap2ExactInPermit236B2FDD8(
         address from ,
         address  to ,
@@ -340,7 +340,7 @@ Parameters:
 
 ## swapIn32502CA71
 
-```
+```solidity
 function swapIn32502CA71(address token, uint256 amountIn, uint256 minOut) external returns (int256, int256) {
         (bool success, bytes memory data) = _getExecutorSwap().delegatecall(abi.encodeCall(
             ISeawaterExecutorSwap.swap904369BE,
@@ -371,7 +371,7 @@ Parameters:
 
 ## swapInPermit2CEAAB576
 
-```
+```solidity
  function swapInPermit2CEAAB576(address token, uint256 amountIn, uint256 minOut, uint256 nonce, uint256 deadline, uint256 maxAmount, bytes memory sig) external returns (int256, int256) {
         (bool success, bytes memory data) = _getExecutorSwapPermit2().delegatecall(abi.encodeCall(
             ISeawaterExecutorSwapPermit2.swapPermit2EE84AD91,
@@ -412,7 +412,7 @@ Parameters:
 
 ## swapOut5E08A399
 
-```
+```solidity
 function swapOut5E08A399(address token, uint256 amountIn, uint256 minOut) external returns (int256, int256) {
         (bool success, bytes memory data) = _getExecutorSwap().delegatecall(abi.encodeCall(
             ISeawaterExecutorSwap.swap904369BE,
@@ -444,7 +444,7 @@ Parameters:
 
 ## swapOutPermit23273373B
 
-```
+```solidity
 function swapOutPermit23273373B(address token, uint256 amountIn, uint256 minOut, uint256 nonce, uint256 deadline, uint256 maxAmount, bytes memory sig) external returns (int256, int256) {
         (bool success, bytes memory data) = _getExecutorSwapPermit2().delegatecall(abi.encodeCall(
             ISeawaterExecutorSwapPermit2.swapPermit2EE84AD91,
@@ -485,8 +485,8 @@ Parameters:
 
  ## mintPositionBC5B086D
 
- ```
-function mintPositionBC5B086D(address /* token */, int32 /* lower */, int32 /* upper */) external returns (uint256 /* id */) {
+ ```solidity
+function mintPositionBC5B086D(address token , int32 lower , int32 upper ) external returns (uint256 id ) {
         directDelegate(_getExecutorPosition());
     }
  ```
@@ -499,11 +499,127 @@ Parameters:
 - ``lower`` and  ``upper``: Represent the lower and upper bounds for the position (e.g., price range or tick range). These bounds might be specific to certain DeFi protocols, such as Uniswap V3, which uses a range for concentrated liquidity.
 
 
+## burnPositionAE401070
+
+```solidity
+function burnPositionAE401070(uint256 id ) external {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``burnPositionAE401070`` function facilitates the removal or "burning" of a position, by closing it out or removing liquidity from a protocol.
+
+
+### Parameters:
+
+``id ``: This parameter represents the unique identifier of the position to be burned. This ID helps locate and specify which position is being removed. While the ID is passed as an argument, it’s not actively used in this function body, meaning it’s expected that the directDelegate call forwards this ID to the delegated function.
+
+
+
+## transferPositionEEC7A3CD
+
+```solidity
+  function transferPositionEEC7A3CD(
+        uint256  id ,
+        address  from ,
+        address to 
+    ) external {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``transferPositionEEC7A3CD`` function handles the transfer of a position from one owner to another, useful for liquidity or asset management within a SeaWater AMM. 
+
+### Parameters:
+
+``id``: This parameter represents the unique identifier of the position being transferred. It allows the contract to reference and locate the specific position for transfer.
+``from``: The current owner of the position, which is the address transferring out the position.
+``to``: The recipient address, indicating the new owner of the specified position after transfer.
+
+
+
+
+## positionBalance4F32C7DB
+
+```solidity 
+  function positionBalance4F32C7DB(address user ) external returns (uint256) {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+
+- The ``positionBalance4F32C7DB`` function is structured to retrieve the balance of a specific position, but instead of containing any logic directly, it delegates this task to an external executor contract.
+
+### Parameters:
+
+``user``: This parameter represents the address of the user whose position balance is being queried. However, the user parameter is not directly used within this function’s body. Instead, it is passed implicitly through delegation to an external executor function in the ``ExecutorPosition`` contract.
+
+
+
+## positionLiquidity8D11C045
+```solidity 
+ function positionLiquidity8D11C045(
+        address  pool ,
+        uint256  id 
+    ) external returns (uint128) {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``positionLiquidity8D11C045`` function is designed to retrieve the liquidity for a specific position within a given pool. 
+
+## Parameters:
+
+- ``pool``: Represents the address of the liquidity pool where the position resides. This parameter is not directly used in the function body; instead, it is passed to the executor contract.
+- ``id``: Refers to the unique identifier of the position within the specified pool. Like pool, this parameter is implicitly passed via the delegate call to the external executor.
+
+
+## positionTickLower2F77CCE1
+
+```solidity
+ function positionTickLower2F77CCE1(
+        address pool ,
+        uint256 id 
+    ) external returns (int32) {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``positionTickLower2F77CCE1`` function retrieves the lower tick bound of a specified position within a given liquidity pool.
+
+
+## Parameters:
+
+``pool``: Specifies the address of the liquidity pool containing the position. This address isn't used directly in the function body but is implicitly passed to the executor contract.
+``id``: The unique identifier of the position within the specified pool. This parameter, like pool, is passed to the executor for further handling.
+
+
+
+## positionTickUpper67FD55BA
+
+```solidity
+ function positionTickUpper67FD55BA(
+        address  pool ,
+        uint256  id 
+    ) external returns (int32) {
+        directDelegate(_getExecutorPosition());
+    }
+
+```
+
+
+- The ``positionTickUpper67FD55BA`` function is used to retrieve the upper tick bound of a specific liquidity position within a pool. 
+
+### Parameters:
+
+``pool``: Represents the address of the liquidity pool where the position resides. Although unused directly in the body, it’s implicitly passed along to the executor.
+``id``: The unique identifier for the position within the specified pool. Like pool, it’s passed to the executor for processing.
+
 
 
 ## fallback()
 
-```
+```solidity
 fallback() external {
         require(msg.data.length > 3);
         require(msg.data[0] == 0);
@@ -551,7 +667,7 @@ fallback() external {
 
 ## _setProxyAdmin
 
-```
+```solidity
  function _setProxyAdmin(address newAdmin) internal {
         StorageSlot.getAddressSlot(PROXY_ADMIN_SLOT).value = newAdmin;
     }
