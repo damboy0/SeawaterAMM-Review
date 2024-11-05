@@ -248,6 +248,70 @@ function quote72E2ADE7(address pool , bool zeroForOne , int256 amount , uint256 
 - The ``quote72E2ADE7`` function is responsible for calculating or returning a quote or estimated amount for a potential swap between two tokens without actually executing the swap. It takes an ``address pool`` which is the address of the pool, a ``bool zeroForOne`` to specify the direction of the swap between two tokens ,an ``int256 amount`` which is the amount to be swapped, and ``uint256 priceLimit`` which take the price limit as parameters. 
 
 
+## quote2CD06B86E
+
+```
+ function quote2CD06B86E(address  to , address from , uint256 amount , uint256  minOut) external {
+        directDelegate(_getExecutorQuote());
+    }
+```
+
+- The ``quote2CD06B86E`` function is responsible for retrieving a quote for swapping an amount of tokens from the ``from`` address to the ``to`` address, ensuring that the minimum output (``minOut``) requirement is met. This quote does not execute the swap but provides the estimated outcome to the caller, which is useful for planning trades and assessing price impacts. it takes the ``to`` which is the address of the token to receive in the swap, ``from`` Address of the token being swapped, ``amount`` Amount of from tokens to be swapped and ``minOut`` Minimum acceptable amount of to tokens to be received as parameters.
+
+
+
+## swapPermit2EE84AD91
+
+```
+function swapPermit2EE84AD91(
+        address pool,
+        bool zeroForOne ,
+        int256 amount ,
+        uint256 priceLimit ,
+        uint256 nonce ,
+        uint256  deadline ,
+        uint256  maxAmount ,
+        bytes memory sig 
+    ) external returns (int256, int256) {
+        directDelegate(_getExecutorSwapPermit2());
+    }
+```
+
+
+- The ``swapPermit2EE84AD91`` function enables swap of tokens in a way that also authorizes SeawaterAMM to spend the user’s tokens, using a permit instead of a separate approve transaction. This function is efficient for gas and user experience since it bundles approval and swap actions into a single step. 
+
+Parameters:
+
+- ``pool``: Address of the liquidity pool for the swap.
+- ``zeroForOne``: Boolean indicating swap direction.
+- ``amount``: Amount of tokens to be swapped.
+- ``priceLimit``: Price limit for the swap to prevent slippage.
+- ``nonce``: Unique identifier for permit signatures.
+- ``deadline``: Expiration time for the permit authorization.
+- ``maxAmount``: Maximum amount of tokens that can be swapped.
+- ``sig``: Signature data (from the permit) for authorizing token transfers.
+
+
+
+## swap2ExactIn41203F1D
+
+```
+ function swap2ExactIn41203F1D(address /* tokenA */, address /* tokenB */, uint256 /* amountIn */, uint256 /* minAmountOut */) external returns (uint256, uint256) {
+        directDelegate(_getExecutorSwap());
+    }
+```
+
+- The ``swap2ExactIn41203F1D`` function Executes a token swap , where the input amount of one token is provided exactly, and the output amount of another token is determined by the pool's current exchange rate. 
+
+Parameters:
+
+` ``tokenIn``: The address of the token being exchanged (input token).
+- ``tokenOut``: The address of the token being received (output token).
+- ``amountIn``: The exact amount of tokenIn that will be swapped.
+
+
+
+
 
 
 
