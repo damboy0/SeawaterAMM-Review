@@ -616,6 +616,203 @@ function burnPositionAE401070(uint256 id ) external {
 ``id``: The unique identifier for the position within the specified pool. Like pool, it’s passed to the executor for processing.
 
 
+## sqrtPriceX967B8F5FC5
+
+```solidity
+  function sqrtPriceX967B8F5FC5(address  pool ) external returns (uint256) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``sqrtPriceX967B8F5FC5`` function is designed to retrieve the square root price (often used in AMMs to represent liquidity pool price information) from a specified liquidity pool. 
+
+### Parameters:
+
+``pool``: Represents the address of the liquidity pool from which the square root price will be retrieved. While it is not directly used within this function's body, it is implicitly passed to the delegated contract through the ``directDelegate`` call.
+
+
+
+
+## feesOwed22F28DBD
+```solidity
+    function feesOwed22F28DBD(
+        address pool ,
+        uint256 position 
+    ) external returns (uint128, uint128) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``feesOwed22F28DBD`` function is designed to retrieve the amount of fees owed for a particular position in a specified liquidity pool.
+
+### Parameters:
+
+``pool``: The address of the liquidity pool. This parameter is passed to the ``ExecutorAdmin`` for further processing.
+``position``: The specific position ID in the pool for which fees are being calculated.
+
+
+
+
+
+## curTick181C6FD9
+
+
+```solidity
+    function curTick181C6FD9(address pool ) external returns (int32) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``curTick181C6FD9`` function retrieves the current tick in the specified pool. The tick is a representation of the price range within the liquidity pool.
+
+### Parameters:
+
+``pool``: The address of the liquidity pool for which the current tick is required.
+
+
+
+
+## tickSpacing653FE28F
+
+```solidity
+    function tickSpacing653FE28F(address /* pool */) external returns (uint8) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``tickSpacing653FE28F`` function retrieves the tick spacing of a given pool, which is the distance between each valid tick. Tick spacing affects the granularity of positions in the pool i.e it defines the smallest interval between two price points where liquidity positions can be added or removed..
+
+### Parameters:
+
+``pool``: The address of the liquidity pool for which the tick spacing is requested.
+
+
+
+
+## feeBB3CF608
+
+
+```solidity
+    function feeBB3CF608(address  pool ) external returns (uint32) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``feeBB3CF608`` function retrieves the fee rate for the specified liquidity pool. 
+
+### Parameters:
+
+- ``pool``: The address of the liquidity pool for which the fee rate is being retrieved.
+
+    
+
+## feeGrowthGlobal038B5665B
+
+```solidity
+    function feeGrowthGlobal038B5665B(address  pool ) external returns (uint256) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- The ``feeGrowthGlobal038B5665B``  function returns the global cumulative fee growth value for a given pool. This metric is used to track the total fees accumulated over time, which LPs(Liquidity Providers) can use to calculate the share of fees they are owed.
+
+
+### Parameters:
+
+``pool``: The address of the liquidity pool for which the global fee growth is being retrieved.
+
+
+
+
+
+## feeGrowthGlobal1A33A5A1B
+
+```solidity
+    function feeGrowthGlobal1A33A5A1B(address pool ) external returns (uint256) {
+        directDelegate(_getExecutorAdmin());
+    }
+```
+
+- Similar to ``feeGrowthGlobal038B5665B``, the ``feeGrowthGlobal1A33A5A1B`` function retrieves another cumulative fee growth metric for the pool, used to help track fee accruals. 
+
+### Parameters:
+
+``pool``: The address of the liquidity pool for which another instance of global fee growth is retrieved.
+
+
+
+    
+## collectSingleTo6D76575F
+
+```solidity 
+    function collectSingleTo6D76575F(
+        address  pool ,
+        uint256 id ,
+        address  recipient 
+    ) external returns (uint128, uint128) {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``collectSingleTo6D76575F`` function collects fees accrued in a specific position (id) within a pool (pool) and transfers them to the specified recipient.
+
+
+### Parameters:
+
+``pool``: The address of the liquidity pool from which the fees will be collected.
+``id``: The ID of the position within the pool for which the fees are being collected.
+``recipient``: The address of the user or entity that will receive the collected fees.
+
+
+
+
+## collect7F21947C
+
+
+```solidity
+    function collect7F21947C(
+        address[] memory  pools ,
+        uint256[] memory  ids 
+    ) external returns (CollectResult[] memory) {
+        directDelegate(_getExecutorPosition());
+    }
+```
+
+- The ``collect7F21947C`` function collects fees from multiple positions across different pools. It takes an array of pools and ids, where each position in a pool has accumulated fees to be collected.
+
+
+
+
+### Parameters:
+
+- ``address[] memory pools``: An array of addresses, each representing a liquidity pool from which fees will be collected.
+``uint256[] memory ids``: An array of IDs, each identifying a specific position within the corresponding pool in the pools array.
+
+
+## updatePositionC7F1F740
+
+```solidity    
+    function updatePositionC7F1F740(
+        address  pool ,
+        uint256  id ,
+        int128 delta
+    ) external returns (int256, int256) {
+        directDelegate(_getExecutorUpdatePosition());
+    }
+```
+
+- The ``updatePositionC7F1F740`` function adjusts the liquidity of a specific position (id) within a pool (pool) by the amount specified in delta. The result reflects updated liquidity values for the position.
+
+
+
+
+### Parameters:
+
+``pool``: The address of the liquidity pool where the position is held.
+``id``: The ID of the position within the pool that will be updated.
+``delta``: The amount by which the liquidity of the position should be adjusted (positive to add liquidity, negative to remove it).
+
+
 
 ## fallback()
 
